@@ -1,0 +1,20 @@
+---
+title: "project"
+author: "Chupei"
+date: "May 24, 2015"
+output: html_document
+---
+
+```{r,echo=TRUE}
+setwd("~/Documents/my classes/Coursera/Practical machine learning/project data")
+training<-read.csv("./pml-training.csv",na.strings=c("NA","#DIV/0!"),stringsAsFactors=FALSE)
+testing<-read.csv("./pml-testing.csv")
+training1<-training[,colSums(is.na(training))==0] ##remove columns with NA
+training2<-training1[,8:dim(training1)[2]]
+library(caret);library(rpart)
+set.seed(123)
+model<-rpart(classe~.,data=training2,method="class",control=rpart.control(minsplit=5,cp=0,xval=2))
+print(model)
+pred<-predict(model,newdata=testing)
+print(pred)
+```
